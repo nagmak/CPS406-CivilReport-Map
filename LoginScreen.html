@@ -1,3 +1,4 @@
+
 <html>
 
 <style>
@@ -80,6 +81,9 @@ h2 {
 
 <script>
 
+  /*
+  Checks if the username and password are valid
+  */
 function checkLogin(){
 var username = document.getElementById('userName').value;
 var password = document.getElementById('passWord').value;
@@ -101,12 +105,12 @@ if(username == "armen" && password == "11"){
 
 <div class="container">
 <h2> Cypress Systems </h2>
-<form onsubmit="return checkLogin()">
+<form>
   <p id="headings">Username</p>
   <input type="text" id="userName" size="20" placeholder="Enter your username"><br>
   <p id="headings1">Password</p>
   <input type="text" id="passWord" size="20" placeholder="Enter your password"><br>
-  <input type="submit" value="Submit" id="loginButton">
+  <input type="submit" onclick="checkLogin()" value="Submit" id="loginButton">
 </form>
 </div>
 

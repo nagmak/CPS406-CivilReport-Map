@@ -1,0 +1,193 @@
+<link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css">
+
+<html>
+
+<style>
+body{
+  background-color: gray;
+}
+h2{
+  text-align: center;
+  font-size: 22px;
+  font-style: oblique;
+  color: black;
+}
+.container{
+    position: absolute;
+    width: 70%;
+    height: 80%;
+    background-color: rgb(140,160,200);
+    left: 15%;
+    top: 10%;
+    border-radius: 3%;
+    border: 3px solid white;
+}
+#map{
+  height: 425px;
+  width: 550px;
+  background-color: white;
+  position: absolute;
+  left: 20%;
+  top: 10%;
+  border-radius: 5%;
+  border: 3px solid gray;
+}
+#home{
+  position: absolute;
+  margin-left: 5%;
+  margin-top: 15%;
+  width: 10%;
+  height: 10%;
+  border-radius: 5%;
+  background-color: rgb(120,160,200);
+  border-radius: 5%;
+  border: 2px solid white;
+}
+#about{
+  position: absolute;
+  margin-left: 83%;
+  margin-top: 15%;
+  width: 10%;
+  height: 10%;
+  background-color: rgb(120,160,200);
+  border-radius: 5%;
+  border: 2px solid white;
+}
+</style>
+
+<title> Public Map</title>
+
+<body>
+<div class="container">
+  <h2>This map contains all the current alerts</h2>
+    <div id="map"></div>
+    <a href="StartupScreen.html"><button id="home">Home</button></a>
+    <a href="AboutPage.html"><button id="about">About</button></a>
+</div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBqsm8APsfhgAZ3q9BE5Q1jQtGGyTTU5CM&callback=myMap"></script>
+<script>
+     var saveButton = false;
+     var pointSet = false;
+     var type = "";
+
+     /*
+     Saves the info about the marker
+     and opens a new page to a map
+     with placed markers
+     */
+     function isSaved(){
+       if(pointSet == true && getDescription() != ''){
+       saveButton = true;
+       window.open("PublicMap.html")
+       type = getType();
+
+      }else{
+       alert("One or more fields have not been set");
+       saveButton = true;
+     }}
+
+     /*
+     Initializes the map
+     */
+     function initialize() {
+       var toronto = { lat: 43.653908, lng: -79.384293 };
+       var map = new google.maps.Map(document.getElementById('map'), {
+         zoom: 12,
+         center: toronto
+       });
+       // This event listener calls addMarker() when the map is clicked.
+       google.maps.event.addListener(map, 'click', function(event) {
+         addMarker(event.latLng, map);
+       });
+     }
+
+     /*
+     Gets the input description from
+     the description box
+     */
+     function getDescription(){
+       return document.getElementById('description').value;
+     }
+
+     /*
+     Gets the markers type and adds it to the database
+     */
+     function getType(){
+      var ddl = document.getElementById('options')
+      if(ddl.options[ddl.selectedIndex].value == "None"){
+        alert("Choose another option")
+      }else{
+      return ddl.options[ddl.selectedIndex].value;
+     }}
+
+     /*
+     Returns the time when the problem was reported
+     */
+     function getTime(){
+       var date = new Date();
+       var tmp = date.toUTCString();
+       var time = tmp;
+       return time;
+     }
+
+   /*
+   Adds the marker to the map
+   (needs work such as taking all the stored points in the database and placing them on the map)
+   */
+     function addMarker(location, map) {
+
+       var  unverifiedMark = {
+         path: 'M 2,2 2,2 2,2 2,2 2,2 z',
+         fillColor: 'green',
+         fillOpacity: 0.8,
+         scale: 1.5,
+         strokeColor: 'green',
+         strokeWeight: 14,
+       };
+       var  verifiedMark = {
+         path: 'M 2,2 2,2 2,2 2,2 2,2 z',
+         fillColor: 'red',
+         fillOpacity: 0.8,
+         scale: 1.5,
+         strokeColor: 'red',
+         strokeWeight: 14,
+       };
+       var  falseMark = {
+         path: 'M 2,2 2,2 2,2 2,2 2,2 z',
+         fillColor: 'gray',
+         fillOpacity: 0.8,
+         scale: 1.5,
+         strokeColor: 'gray',
+         strokeWeight: 14,
+       };
+       var  dispatchedMark = {
+         path: 'M 2,2 2,2 2,2 2,2 2,2 z',
+         fillColor: 'blue',
+         fillOpacity: 0.8,
+         scale: 1.5,
+         strokeColor: 'blue',
+         strokeWeight: 14,
+       };
+
+       if(pointSet == false && getType() && getDescription() != ''){
+       var marker = new google.maps.Marker({
+         position: location,
+         map: map,
+         draggable: true,
+         icon: unverifiedMark,
+       });
+       pointSet = true;
+      }
+      marker.addListener('click', function(){
+        alert("ProblemType: " + getType() + "\n" + "Description: " + getDescription() + "\n" + "Time Reported: " + getTime());
+      })
+     }
+
+     google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+
+
+</body>
+
+</html>

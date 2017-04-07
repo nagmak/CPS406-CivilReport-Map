@@ -1,5 +1,6 @@
-<html>
+<link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css">
 
+<html>
 <style>
 body{
   background-color: gray;
@@ -46,7 +47,7 @@ hr{
   border: 3px solid #ddd;
   border-radius: 3%;
 }
-.descriptonContainer{
+.mapContainer{
   width: 50%;
   height: 80%;
   position: absolute;
@@ -101,7 +102,7 @@ hr{
   color: white;
   background-color: rgba(140,160,240,0.7);
 }
-#messageBox{
+#map{
   margin-left: 10%;
   width: 80%;
   height: 60%;
@@ -130,10 +131,10 @@ hr{
 <hr>
 </div>
 
-<div class="descriptonContainer">
+<div class="mapContainer">
   <h3>Description</h3>
   <hr>
-  <textarea id="messageBox"> </textarea>
+  <div id="map"> </div>
   <hr>
   <form>
   <input type="submit" value="Fixed" id="fixed">
@@ -145,7 +146,127 @@ hr{
 
 </div>
 
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBqsm8APsfhgAZ3q9BE5Q1jQtGGyTTU5CM&callback=myMap"></script>
+<script>
+     var labels = '123456789';
+     var labelIndex = 0;
+     var saveButton = false;
+     var pointSet = false;
+     var type = "";
 
+     /*
+     Saves the info about the marker
+     and opens a new page to a map
+     with placed markers
+     */
+     function isSaved(){
+       if(pointSet == true && getDescription() != ''){
+       saveButton = true;
+       window.open("PublicMap.html")
+       type = getType();
 
+      }else{
+       alert("One or more fields have not been set");
+       saveButton = true;
+     }}
+
+     /*
+     Initializes the map
+     */
+     function initialize() {
+       var toronto = { lat: 43.653908, lng: -79.384293 };
+       var map = new google.maps.Map(document.getElementById('map'), {
+         zoom: 12,
+         center: toronto
+       });
+       // This event listener calls addMarker() when the map is clicked.
+       google.maps.event.addListener(map, 'click', function(event) {
+         addMarker(event.latLng, map);
+       });
+     }
+
+     /*
+     Gets the input description from
+     the description box
+     */
+     function getDescription(){
+       return document.getElementById('description').value;
+     }
+
+     /*
+     Gets the markers type and adds it to the database
+     */
+     function getType(){
+      var ddl = document.getElementById('options')
+      if(ddl.options[ddl.selectedIndex].value == "None"){
+        alert("Choose another option")
+      }else{
+      return ddl.options[ddl.selectedIndex].value;
+     }}
+
+     /*
+     Returns the time when the problem was reported
+     */
+     function getTime(){
+       var date = new Date();
+       var tmp = date.toUTCString();
+       var time = tmp;
+       return time;
+     }
+
+   /*
+   Adds the marker to the map
+   */
+     function addMarker(location, map) {
+
+       var  unverifiedMark = {
+         path: 'M 2,2 2,2 2,2 2,2 2,2 z',
+         fillColor: 'green',
+         fillOpacity: 0.8,
+         scale: 1.5,
+         strokeColor: 'green',
+         strokeWeight: 14,
+       };
+       var  verifiedMark = {
+         path: 'M 2,2 2,2 2,2 2,2 2,2 z',
+         fillColor: 'red',
+         fillOpacity: 0.8,
+         scale: 1.5,
+         strokeColor: 'red',
+         strokeWeight: 14,
+       };
+       var  falseMark = {
+         path: 'M 2,2 2,2 2,2 2,2 2,2 z',
+         fillColor: 'gray',
+         fillOpacity: 0.8,
+         scale: 1.5,
+         strokeColor: 'gray',
+         strokeWeight: 14,
+       };
+       var  dispatchedMark = {
+         path: 'M 2,2 2,2 2,2 2,2 2,2 z',
+         fillColor: 'blue',
+         fillOpacity: 0.8,
+         scale: 1.5,
+         strokeColor: 'blue',
+         strokeWeight: 14,
+       };
+
+       if(pointSet == false && getType() && getDescription() != ''){
+       var marker = new google.maps.Marker({
+         position: location,
+         map: map,
+         draggable: true,
+         icon: unverifiedMark,
+       });
+       pointSet = true;
+      }
+      marker.addListener('click', function(){
+        alert("ProblemType: " + getType() + "\n" + "Description: " + getDescription() + "\n" + "Time Reported: " + getTime());
+      })
+     }
+
+     google.maps.event.addDomListener(window, 'load', initialize);
+</script>
 </body>
 </html>
