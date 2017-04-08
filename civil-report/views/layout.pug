@@ -1,12 +1,32 @@
 doctype html
 html
-  head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
-    script(src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous")
-    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous")
-    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous")
-
-  body
-    .container
-    block content
+    block link
+        -var selected = 'Home'; //default
+    head
+        title= title
+        meta(name="viewport" content="width=device-width" initial-scale="1.0")
+        link(rel='stylesheet', href='/stylesheets/style.css')
+        script(src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous")
+        link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous")
+        script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous")
+        script(type="text/javascript" src="/javascripts/map.js" )
+        script(async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCA7uRtmPo9Dij18BiD-KUCejMR4HBQJPk&callback=initMap&libraries=drawing,geometry,places,visualization")
+    -var menu = { 'Home': '/', 'About': '/about', 'Map': '/map' };
+    body
+        nav(class="navbar navbar-default")
+            .container
+                .navbar-header
+                    a(class="navbar-brand" href="/")
+                ul(class="nav navbar-nav")
+                    each val, key in menu
+                        if selected === key
+                            li.active
+                                a.selected(href=val, title=key)= key
+                        else
+                            li
+                                a(href=val, title=key)= key
+                ul(class="nav navbar-nav navbar-right")
+                    li 
+                        button(type="button" class="btn btn-default navbar-btn") Civil Account Sign-in 
+        .container
+            block content

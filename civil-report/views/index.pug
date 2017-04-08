@@ -1,5 +1,16 @@
 extends layout
 
+block link
+  -var selected = 'Home';
+
 block content
-  h1= title
-  p Welcome to #{title}
+    h1= title
+    p Welcome to the #{title}
+        .row
+            .col-md-12
+                .page-header
+                    h1 Please click on your user type
+    div#map
+//-    .row
+        .col-md-12    
+            div#map
