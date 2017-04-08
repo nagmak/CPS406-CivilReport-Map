@@ -3,8 +3,26 @@ div(class="modal fade" id="problemModal" )
         .modal-content
             .modal-header
                 button(type="button" class="close" data-dismiss="modal") &times;
-                .modal-title Modal Header
+                .modal-title 
+                    h2 Problem Report
             .modal-body
-                p body modal
+                form(id='problemForm' action="/problem"  method="post")
+                    .form-group
+                        label(for="problemType") Problem type:
+                        select(class="form-control" id="problemType" name='probType')
+                            option Medical
+                            option Fire Services
+                            option Police Services
+                            option Roadside Accident
+                            option Other
+                        br
+                        label(for="problemDesc") Description of the problem (140 character limit):
+                        input(class="form-control" name='probDesc' type="textarea" rows="3" id="problemDesc" maxLength="140")
+                        br
+                        label(for="optionalEmail") Enter an email if you wish to recieve any updates on this problem (optional):
+                        input(type="email" name='optionEmail' id="optionalEmail")
+                        
             .modal-footer
+                input(type="submit" class="btn btn-primary" value="Save" form='problemForm') 
                 button(type="button" class="btn btn-default" data-dismiss="modal") Close
+                

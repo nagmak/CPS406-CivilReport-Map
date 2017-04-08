@@ -30,3 +30,7 @@ a {
 .contextmenu div {
     padding-left: 5px
 }
+
+textarea {
+   resize: none;
+}

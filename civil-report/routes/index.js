@@ -11,4 +11,7 @@ router.get('/about', function(req, res, next) {
 router.get('/map', function(req, res, next) {
   res.render('map', { title: 'Map ' });
 });
+router.post('/problem',function(req, res, next) {
+  res.send(req.body);
+});
 module.exports = router;
