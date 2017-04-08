@@ -109,7 +109,7 @@ function showMapMenu(caurrentLatLng, dist) {
         contextmenuDir = document.createElement("div");
         $(contextmenuDir).attr("tabindex", -1);
         contextmenuDir.className = 'contextmenu';
-        contextmenuDir.innerHTML = "<a id='reportProblem'><div class=context>menu item 1<\/div><\/a><a id='menu2'><div class=context>menu item 2<\/div><\/a>";
+        contextmenuDir.innerHTML = "<a id='reportProblem' data-toggle='modal' data-target='#problemModal'><div class=context>menu item 1<\/div><\/a><a id='menu2'><div class=context>menu item 2<\/div><\/a>";
         $(map.getDiv()).append(contextmenuDir);
 
         setMenuXY(caurrentLatLng);
@@ -151,7 +151,7 @@ function runSnapToRoad(path) {
     }, function(data) {
         processSnapToRoadResponse(data, currPts);
 
-        drawSnappedPolyline();
+        //drawSnappedPolyline();
     });
 }
 
