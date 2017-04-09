@@ -5,8 +5,8 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { user : req.user });
-  res.render('index', { title: 'Cypress System ' });
+  // res.render('index', { title: 'Cypress System '});
+  res.render('index', { title: 'Cypress System (Civil) ', user: req.user });
 });
 router.get('/about', function(req, res, next) {
   res.render('about', { title: 'About ' });
@@ -25,6 +25,11 @@ router.post('/register', function(req, res) {
         if (err) {
             return res.render('register', { account : account });
         }
+        // if (err) {
+        //   return res.status(500).json({
+        //     err: err
+        //   });
+        // }
 
         passport.authenticate('local')(req, res, function () {
             req.session.save((err) => {
@@ -33,6 +38,9 @@ router.post('/register', function(req, res) {
                 }
                 res.redirect('/');
             });
+            // return res.status(200).json({
+            //   status: 'Registration successful!'
+            // });
 
         });
     });
@@ -53,12 +61,26 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/login'
 
 router.get('/logout', (req, res, next) => {
     req.logout();
-    req.session.save((err) => {
-        if (err) {
-            return next(err);
-        }
-        res.redirect('/');
+    res.status(200).json({
+      status: 'Bye!'
     });
+    // req.session.save((err) => {
+    //     if (err) {
+    //         return next(err);
+    //     }
+    //     res.redirect('/');
+    // });
+});
+
+router.get('/status', function(req, res) {
+  if (!req.isAuthenticated()) {
+    return res.status(200).json({
+      status: false
+    });
+  }
+  res.status(200).json({
+    status: true
+  });
 });
 
 /* Regular User */
@@ -99,15 +121,4 @@ router.post('/problem',function(req, res, next) {
 router.get('/ping', function(req, res){
     res.status(200).send("pong!");
 });
-
-/* GET Userlist page. */
-// router.get('/userlist', function(req, res) {
-//     var db = req.db;
-//     var collection = db.get('regularUser');
-//     collection.find({},{},function(e,docs){
-//         res.render('userlist', {
-//             "userlist" : docs
-//         });
-//     });
-// });
 module.exports = router;

@@ -5,12 +5,12 @@ block link
 
 block content
     .container
-        if (!user)
+        if !user
             a(href="/login") Login
             br
             a(href="/register") Register
-        if (user)
-            p You are currently logged in as Civil Servant
+        else
+            p You are currently logged in as #{user.username}
             a(href="/logout") Logout
 
     h1= title
