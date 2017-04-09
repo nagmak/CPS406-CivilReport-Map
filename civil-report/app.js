@@ -4,6 +4,12 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var flash = require('connect-flash'); // flashes a message to user w/out opening a new page
+
+// Initialize database
+var mongo = require('mongodb');
+var monk = require('monk');
+var db = monk('localhost:27017/civil-report');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -20,7 +26,20 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Make db accessible to our router
+app.use(function(req,res,next){
+    req.db = db;
+    next();
+});
+
+// Make flash accessible to router
+app.use(function (req, res, next) {
+  req.flash('info', 'hello!');
+  next();
+})
 
 app.use('/', index);
 app.use('/users', users);
