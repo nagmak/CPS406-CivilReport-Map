@@ -9,7 +9,11 @@ var flash = require('connect-flash'); // flashes a message to user w/out opening
 // Initialize database
 var mongo = require('mongodb');
 var monk = require('monk');
-var db = monk('localhost:27017/civil-report');
+var dbURL = 'localhost:27017/civil-report';
+var db = monk(dbURL);
+var mongoose = require('mongoose');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -27,6 +31,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Make db accessible to our router
@@ -36,13 +42,22 @@ app.use(function(req,res,next){
 });
 
 // Make flash accessible to router
-app.use(function (req, res, next) {
-  req.flash('info', 'hello!');
-  next();
-})
+// app.use(function (req, res, next) {
+//   req.flash('info', 'hello!');
+//   next();
+// })
 
 app.use('/', index);
 app.use('/users', users);
+
+// passport config
+var Account = require('./models/account');
+passport.use(new LocalStrategy(Account.authenticate()));
+passport.serializeUser(Account.serializeUser());
+passport.deserializeUser(Account.deserializeUser());
+
+// mongoose
+mongoose.connect(dbURL);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
