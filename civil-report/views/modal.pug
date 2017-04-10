@@ -22,11 +22,9 @@ div(class="modal fade" id="problemModal" )
                         label(for="optionalEmail") Enter an email if you wish to recieve any updates on this problem (optional):
                         input(type="email" name='optionEmail' id="optionalEmail")
                         br
-                        label(for="latitude" class="latitude") Latitude:
-                        p #{lat}
+                        input(for="latitude" class="latitude" id="latitude" name="latitude")
                         br
-                        label(for="longitude" class="longitude") Longitude:
-                        p #{long}
+                        input(for="longitude" class="longitude" id="longitude" name="longitude")
                         
             .modal-footer
                 input(type="submit" class="btn btn-primary" value="Save" form='problemForm') 

@@ -3,14 +3,6 @@ var map;
 var drawingManager;
 var lat, long;
 
-var setLat = (latitude) => {
-    lat = latitude;
-};
-
-var setLong = (longitude) => {
-    long = longitude;
-};
-
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 43.761539, lng: -79.411079 },
@@ -51,33 +43,28 @@ function initMap() {
         return false;
     });
 
+    var displayLatitude = document.getElementById('latitude');
+    var displayLongitude = document.getElementById('longitude');
     google.maps.event.addListener(map, "rightclick", function(event) {
-         var lat = event.latLng.lat();
-         var lng = event.latLng.lng();
+         lat = event.latLng.lat();
+         long = event.latLng.lng();
+        //  var db = req.db;
+        //  // Set our collection
+        // var regularUser = db.get('regularUser');
          // populate yor box/field with lat, lng
         //  alert("Lat=" + lat + "; Lng=" + lng);
-        setLat(lat);
-        setLong(lng);
-        console.log("Latitude: "+ getLat());
-        console.log("Longitude: "+ getLong());
         addMarker(event.latLng, map);
+        displayLatitude.value = lat;
+        displayLongitude.value = long;
         getCloseRoad(event.latLng);
         //showMapMenu(event.latLng);
     });
+    // google.maps.event.addDomListener(window, 'load', initMap);
     /*google.maps.event.addListener(map, "mouseout", function(event) {
         removeMapMenu();
     });*/
 }
 
-var getLat = () => {
-    console.log("dis" + lat);
-    return lat;
-};
-
-var getLong = () => {
-    console.log("dis2" + long);
-    return long;
-};
 
 /*
    Adds the marker to the map
@@ -261,7 +248,12 @@ function processSnapToRoadResponse(data, currPts) {
 }
 */
 
-module.exports = {
-  getLat,
-  getLong
+var getLat = () => {
+    console.log("dis" + lat);
+    return lat;
+};
+
+var getLong = () => {
+    console.log("dis2" + long);
+    return long;
 };

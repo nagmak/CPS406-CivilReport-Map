@@ -84,41 +84,45 @@ router.get('/status', function(req, res) {
 /* Regular User */
 
 router.post('/problem',function(req, res, next) {
-  var db = req.db;
+    if (!req.isAuthenticated()){
+        var db = req.db;
+        // Get our form values. These rely on the "name" attributes in modal.pug
+        var probDesc = req.body.probDesc;
+        var probType = req.body.probType;
+        var lat = req.body.latitude;
+        var long = req.body.longitude;
 
-  // Get our form values. These rely on the "name" attributes in modal.pug
-  var probDesc = req.body.probDesc;
-  var probType = req.body.probType;
-  var lat = map.getLat();
-  var long = map.getLong();
+        var email = req.body.optionEmail;
+        if (email == ""){ email = "None" };
+        // var lat
+        // var long
 
-  var email = req.body.optionEmail;
-  if (email == ""){ email = "None" };
-  // var lat
-  // var long
-
-  // Set our collection
-  var regularUser = db.get('regularUser');
-  
-  // Submit to the DB
-    regularUser.insert({
-        "probDesc" : probDesc,
-        "probType" : probType,
-        "email": email,
-        "lat": lat,
-        "long": long
-        // "lat": lat
-        // "long": long
-    }, function (err, doc) {
-        if (err) {
-            // If it failed, return error
-            res.send("There was a problem adding the information to the database.");
-        }
-        else {
-            // And forward to success page
-            res.redirect("/");
-        }
-    });
+        // Set our collection
+        var regularUser = db.get('regularUser');
+        
+        // Submit to the DB
+            regularUser.insert({
+                "probDesc" : probDesc,
+                "probType" : probType,
+                "email": email,
+                "lat": lat,
+                "long": long
+                // "lat": lat
+                // "long": long
+            }, function (err, doc) {
+                if (err) {
+                    // If it failed, return error
+                    res.send("There was a problem adding the information to the database.");
+                }
+                else {
+                    // And forward to success page
+                    res.redirect("/");
+                }
+            });
+    }
+    else{
+        
+    }
 });
 
 router.get('/ping', function(req, res){
