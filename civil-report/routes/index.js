@@ -1,4 +1,5 @@
 var express = require('express');
+var mongoose = require('mongoose');
 var passport = require('passport');
 var Account = require('../models/account');
 var map = require('../public/javascripts/map');
@@ -121,7 +122,31 @@ router.post('/problem',function(req, res, next) {
             });
     }
     else{
-        
+        Account.findOne({ username: req.user.username }, function(err, user){
+            if(err){
+                res.json(err);
+            }
+            else if(user == null){
+                res.json('no such user!');
+            }
+            else{
+                user.username = req.user.username;
+                user.password = req.user.password;
+                user.probType = req.body.probType;
+                user.probDesc = req.body.probDesc;
+                user.email = req.body.email;
+                user.lat = req.body.latitude;
+                user.long = req.body.longitude;
+
+                user.save(function(err){
+                    if(err){
+                        console.error('ERROR!');
+                    }
+                    res.redirect("/");
+                });
+
+            }
+        });
     }
 });
 
