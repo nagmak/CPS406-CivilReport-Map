@@ -6,7 +6,11 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Cypress System (Civil) ', user: req.user });
+  var title = 'Cypress System ';
+  if(req.isAuthenticated()){
+    title = 'Cypress System (Civil)';
+  }
+  res.render('index', { title: title, user: req.user });
 });
 router.get('/about', function(req, res, next) {
   res.render('about', { title: 'About ' });

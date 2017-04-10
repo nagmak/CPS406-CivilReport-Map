@@ -60,7 +60,7 @@ function initMap() {
         setLong(lng);
         console.log("Latitude: "+ getLat());
         console.log("Longitude: "+ getLong());
-    
+        addMarker(event.latLng, map);
         getCloseRoad(event.latLng);
         //showMapMenu(event.latLng);
     });
@@ -78,6 +78,56 @@ var getLong = () => {
     console.log("dis2" + long);
     return long;
 };
+
+/*
+   Adds the marker to the map
+   (needs work such as taking all the stored points in the database and placing them on the map)
+   */
+
+function addMarker(location, map) {
+    var  unverifiedMark = {
+        path: 'M 2,2 2,2 2,2 2,2 2,2 z',
+        fillColor: 'green',
+        fillOpacity: 0.8,
+        scale: 1.5,
+        strokeColor: 'green',
+        strokeWeight: 14,
+    };
+       
+    var  verifiedMark = {
+        path: 'M 2,2 2,2 2,2 2,2 2,2 z',
+        fillColor: 'red',
+        fillOpacity: 0.8,
+        scale: 1.5,
+        strokeColor: 'red',
+        strokeWeight: 14,
+    };
+       
+    var  falseMark = {
+        path: 'M 2,2 2,2 2,2 2,2 2,2 z',
+        fillColor: 'gray',
+        fillOpacity: 0.8,
+        scale: 1.5,
+        strokeColor: 'gray',
+        strokeWeight: 14,
+    };
+       
+    var  dispatchedMark = {
+        path: 'M 2,2 2,2 2,2 2,2 2,2 z',
+        fillColor: 'blue',
+        fillOpacity: 0.8,
+        scale: 1.5,
+        strokeColor: 'blue',
+        strokeWeight: 14,
+    };
+
+    var marker = new google.maps.Marker({
+        position: location,
+        map: map,
+        draggable: true,
+        icon: unverifiedMark,
+    });
+}
 
 function getCloseRoad(caurrentLatLng) {
     pathCoord = [caurrentLatLng, caurrentLatLng];
