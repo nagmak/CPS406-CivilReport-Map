@@ -1,11 +1,11 @@
 var express = require('express');
 var passport = require('passport');
 var Account = require('../models/account');
+var map = require('../public/javascripts/map');
 var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  // res.render('index', { title: 'Cypress System '});
   res.render('index', { title: 'Cypress System (Civil) ', user: req.user });
 });
 router.get('/about', function(req, res, next) {
@@ -25,11 +25,6 @@ router.post('/register', function(req, res) {
         if (err) {
             return res.render('register', { account : account });
         }
-        // if (err) {
-        //   return res.status(500).json({
-        //     err: err
-        //   });
-        // }
 
         passport.authenticate('local')(req, res, function () {
             req.session.save((err) => {
@@ -38,10 +33,6 @@ router.post('/register', function(req, res) {
                 }
                 res.redirect('/');
             });
-            // return res.status(200).json({
-            //   status: 'Registration successful!'
-            // });
-
         });
     });
 });
@@ -50,26 +41,29 @@ router.get('/login', function(req, res) {
     res.render('login', { user : req.user, error : req.flash('error')});
 });
 
-router.post('/login', passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }), (req, res, next) => {
-    req.session.save((err) => {
-        if (err) {
-            return next(err);
-        }
-        res.redirect('/');
+router.post('/login', function (req, res, next) {
+        passport.authenticate('local',  function (err, user, info) {
+            if (err) {
+                return next(err); // will generate a 500 error
+            }
+            if (!user) {
+                return res.send({ success : false, message : info.message || 'Falha no login' });
+            }
+
+            req.logIn(user, function(err) {
+                if (err) { return next(err); }
+                // res.send({ success : true, message : 'Login efetivado com sucesso', user: user });
+                req.user = user;
+            });
+            res.redirect('/');
+            //return res.send({ success : true, message : 'Login efetivado com sucesso', user: user });
+        })(req, res, next);
     });
-});
+
 
 router.get('/logout', (req, res, next) => {
     req.logout();
-    res.status(200).json({
-      status: 'Bye!'
-    });
-    // req.session.save((err) => {
-    //     if (err) {
-    //         return next(err);
-    //     }
-    //     res.redirect('/');
-    // });
+    res.redirect('/');
 });
 
 router.get('/status', function(req, res) {
@@ -91,6 +85,9 @@ router.post('/problem',function(req, res, next) {
   // Get our form values. These rely on the "name" attributes in modal.pug
   var probDesc = req.body.probDesc;
   var probType = req.body.probType;
+  var lat = map.getLat();
+  var long = map.getLong();
+
   var email = req.body.optionEmail;
   if (email == ""){ email = "None" };
   // var lat
@@ -103,7 +100,9 @@ router.post('/problem',function(req, res, next) {
     regularUser.insert({
         "probDesc" : probDesc,
         "probType" : probType,
-        "email": email
+        "email": email,
+        "lat": lat,
+        "long": long
         // "lat": lat
         // "long": long
     }, function (err, doc) {

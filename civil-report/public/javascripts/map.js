@@ -1,6 +1,15 @@
 var apiKey = 'AIzaSyCA7uRtmPo9Dij18BiD-KUCejMR4HBQJPk';
 var map;
-var drawingManager
+var drawingManager;
+var lat, long;
+
+var setLat = (latitude) => {
+    lat = latitude;
+};
+
+var setLong = (longitude) => {
+    long = longitude;
+};
 
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
@@ -41,11 +50,17 @@ function initMap() {
         ev.preventDefault();
         return false;
     });
+
     google.maps.event.addListener(map, "rightclick", function(event) {
-        /* var lat = event.latLng.lat();
+         var lat = event.latLng.lat();
          var lng = event.latLng.lng();
          // populate yor box/field with lat, lng
-         alert("Lat=" + lat + "; Lng=" + lng);*/
+        //  alert("Lat=" + lat + "; Lng=" + lng);
+        setLat(lat);
+        setLong(lng);
+        console.log("Latitude: "+ getLat());
+        console.log("Longitude: "+ getLong());
+    
         getCloseRoad(event.latLng);
         //showMapMenu(event.latLng);
     });
@@ -53,6 +68,16 @@ function initMap() {
         removeMapMenu();
     });*/
 }
+
+var getLat = () => {
+    console.log("dis" + lat);
+    return lat;
+};
+
+var getLong = () => {
+    console.log("dis2" + long);
+    return long;
+};
 
 function getCloseRoad(caurrentLatLng) {
     pathCoord = [caurrentLatLng, caurrentLatLng];
@@ -185,3 +210,8 @@ function processSnapToRoadResponse(data, currPts) {
     //polylines.push(snappedPolyline);
 }
 */
+
+module.exports = {
+  getLat,
+  getLong
+};
