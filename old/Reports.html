@@ -107,6 +107,26 @@ hr{
   width: 80%;
   height: 60%;
 }
+#home{
+  width: 10%;
+  height: 8%;
+  position: absolute;
+  left: 10%;
+  top: 5%;
+  border: 3px solid white;
+  background-color: rgb(140,160,200);
+  color: white;
+}
+#about{
+  width: 10%;
+  height: 8%;
+  position: absolute;
+  top: 5%;
+  right: 10%;
+  border: 3px solid white;
+  background-color: rgb(140,160,200);
+  color: white;
+}
 </style>
 
 <title> Current Updates</title>
@@ -115,6 +135,9 @@ hr{
 
 <div class="container">
 <h1> Current Updates </h1>
+
+<a href="StartupScreen.html"><button id="home">Home</button></a>
+<a href="AboutPage.html"><button id="about">About</button></a>
 
 <div class="problemContainer">
 <h2> Reported Problems </h2>
@@ -146,13 +169,57 @@ hr{
 
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/3.7.5/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBHwu9L4hXrosQu67TcHLkv5y6rTegswsQ",
+    authDomain: "cps406-d0ee6.firebaseapp.com",
+    databaseURL: "https://cps406-d0ee6.firebaseio.com",
+    projectId: "cps406-d0ee6",
+    storageBucket: "cps406-d0ee6.appspot.com",
+    messagingSenderId: "463280130148"
+  };
+  firebase.initializeApp(config);
+</script>
+
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBqsm8APsfhgAZ3q9BE5Q1jQtGGyTTU5CM&callback=myMap"></script>
 <script>
-     var labels = '123456789';
-     var labelIndex = 0;
      var saveButton = false;
      var pointSet = false;
      var type = "";
+     var  unverifiedMark = {
+       path: 'M 2,2 2,2 2,2 2,2 2,2 z',
+       fillColor: 'green',
+       fillOpacity: 0.8,
+       scale: 1.5,
+       strokeColor: 'green',
+       strokeWeight: 14,
+     };
+     var  verifiedMark = {
+       path: 'M 2,2 2,2 2,2 2,2 2,2 z',
+       fillColor: 'red',
+       fillOpacity: 0.8,
+       scale: 1.5,
+       strokeColor: 'red',
+       strokeWeight: 14,
+     };
+     var  falseMark = {
+       path: 'M 2,2 2,2 2,2 2,2 2,2 z',
+       fillColor: 'gray',
+       fillOpacity: 0.8,
+       scale: 1.5,
+       strokeColor: 'gray',
+       strokeWeight: 14,
+     };
+     var  dispatchedMark = {
+       path: 'M 2,2 2,2 2,2 2,2 2,2 z',
+       fillColor: 'blue',
+       fillOpacity: 0.8,
+       scale: 1.5,
+       strokeColor: 'blue',
+       strokeWeight: 14,
+     };
 
      /*
      Saves the info about the marker
@@ -164,7 +231,6 @@ hr{
        saveButton = true;
        window.open("PublicMap.html")
        type = getType();
-
       }else{
        alert("One or more fields have not been set");
        saveButton = true;
@@ -185,72 +251,12 @@ hr{
        });
      }
 
-     /*
-     Gets the input description from
-     the description box
-     */
-     function getDescription(){
-       return document.getElementById('description').value;
-     }
 
-     /*
-     Gets the markers type and adds it to the database
-     */
-     function getType(){
-      var ddl = document.getElementById('options')
-      if(ddl.options[ddl.selectedIndex].value == "None"){
-        alert("Choose another option")
-      }else{
-      return ddl.options[ddl.selectedIndex].value;
-     }}
-
-     /*
-     Returns the time when the problem was reported
-     */
-     function getTime(){
-       var date = new Date();
-       var tmp = date.toUTCString();
-       var time = tmp;
-       return time;
-     }
 
    /*
    Adds the marker to the map
    */
      function addMarker(location, map) {
-
-       var  unverifiedMark = {
-         path: 'M 2,2 2,2 2,2 2,2 2,2 z',
-         fillColor: 'green',
-         fillOpacity: 0.8,
-         scale: 1.5,
-         strokeColor: 'green',
-         strokeWeight: 14,
-       };
-       var  verifiedMark = {
-         path: 'M 2,2 2,2 2,2 2,2 2,2 z',
-         fillColor: 'red',
-         fillOpacity: 0.8,
-         scale: 1.5,
-         strokeColor: 'red',
-         strokeWeight: 14,
-       };
-       var  falseMark = {
-         path: 'M 2,2 2,2 2,2 2,2 2,2 z',
-         fillColor: 'gray',
-         fillOpacity: 0.8,
-         scale: 1.5,
-         strokeColor: 'gray',
-         strokeWeight: 14,
-       };
-       var  dispatchedMark = {
-         path: 'M 2,2 2,2 2,2 2,2 2,2 z',
-         fillColor: 'blue',
-         fillOpacity: 0.8,
-         scale: 1.5,
-         strokeColor: 'blue',
-         strokeWeight: 14,
-       };
 
        if(pointSet == false && getType() && getDescription() != ''){
        var marker = new google.maps.Marker({

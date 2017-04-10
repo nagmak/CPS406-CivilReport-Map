@@ -10,7 +10,7 @@ h2{
   text-align: center;
   font-size: 22px;
   font-style: oblique;
-  color: black;
+  color: white;
 }
 .container{
     position: absolute;
@@ -42,6 +42,7 @@ h2{
   background-color: rgb(120,160,200);
   border-radius: 5%;
   border: 2px solid white;
+  color: white;
 }
 #about{
   position: absolute;
@@ -52,6 +53,7 @@ h2{
   background-color: rgb(120,160,200);
   border-radius: 5%;
   border: 2px solid white;
+  color: white;
 }
 </style>
 
@@ -59,33 +61,91 @@ h2{
 
 <body>
 <div class="container">
-  <h2>This map contains all the current alerts</h2>
+  <h2>This map contains all the current reports</h2>
     <div id="map"></div>
     <a href="StartupScreen.html"><button id="home">Home</button></a>
     <a href="AboutPage.html"><button id="about">About</button></a>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/3.7.5/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBHwu9L4hXrosQu67TcHLkv5y6rTegswsQ",
+    authDomain: "cps406-d0ee6.firebaseapp.com",
+    databaseURL: "https://cps406-d0ee6.firebaseio.com",
+    projectId: "cps406-d0ee6",
+    storageBucket: "cps406-d0ee6.appspot.com",
+    messagingSenderId: "463280130148"
+  };
+  firebase.initializeApp(config);
+</script>
+
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBqsm8APsfhgAZ3q9BE5Q1jQtGGyTTU5CM&callback=myMap"></script>
 <script>
-     var saveButton = false;
-     var pointSet = false;
-     var type = "";
+var unverifiedMark = {
+  path: 'M 2,2 2,2 2,2 2,2 2,2 z',
+  fillColor: 'green',
+  fillOpacity: 0.8,
+  scale: 1.5,
+  strokeColor: 'green',
+  strokeWeight: 14,
+};
+var verifiedMark = {
+  path: 'M 2,2 2,2 2,2 2,2 2,2 z',
+  fillColor: 'red',
+  fillOpacity: 0.8,
+  scale: 1.5,
+  strokeColor: 'red',
+  strokeWeight: 14,
+};
+var falseMark = {
+  path: 'M 2,2 2,2 2,2 2,2 2,2 z',
+  fillColor: 'gray',
+  fillOpacity: 0.8,
+  scale: 1.5,
+  strokeColor: 'gray',
+  strokeWeight: 14,
+};
+var dispatchedMark = {
+  path: 'M 2,2 2,2 2,2 2,2 2,2 z',
+  fillColor: 'blue',
+  fillOpacity: 0.8,
+  scale: 1.5,
+  strokeColor: 'blue',
+  strokeWeight: 14,
+};
+var markerRef = firebase.database().ref('Markers');
+var markerLat;//Marker Latitude
+var markerLng;//Marker Longitude
+var markerLoc;//Marker location
+var markerDes;//Marker description
+var markerStat;//Marker color
+var markerCol;//Marker color
+var markerType;//Marker type
 
-     /*
-     Saves the info about the marker
-     and opens a new page to a map
-     with placed markers
-     */
-     function isSaved(){
-       if(pointSet == true && getDescription() != ''){
-       saveButton = true;
-       window.open("PublicMap.html")
-       type = getType();
-
-      }else{
-       alert("One or more fields have not been set");
-       saveButton = true;
-     }}
+function check(){
+markerRef.on('value', function(snapshot){
+  snapshot.forEach(function(childSnapshot){
+    var childData = childSnapshot.val();
+    markerLat = childData.Latitude;
+    markerLng = childData.Longitude;
+    markerDes = childData.Description;
+    markerAdd = childData.Address;
+    markerStat = "In progress";
+    markerCol = childData.Color;
+    markerType = childData.Type;
+    markerTme = childData.TimeRecorded;
+    markerLoc = (markerLat, markerLng);
+    console.log(markerLat);
+    console.log(markerLng);
+    console.log(markerDes);
+    console.log(markerAdd);
+    console.log(markerStat);
+    console.log(markerLoc);
+  })
+})
+}
 
      /*
      Initializes the map
@@ -97,38 +157,11 @@ h2{
          center: toronto
        });
        // This event listener calls addMarker() when the map is clicked.
-       google.maps.event.addListener(map, 'click', function(event) {
-         addMarker(event.latLng, map);
-       });
-     }
-
-     /*
-     Gets the input description from
-     the description box
-     */
-     function getDescription(){
-       return document.getElementById('description').value;
-     }
-
-     /*
-     Gets the markers type and adds it to the database
-     */
-     function getType(){
-      var ddl = document.getElementById('options')
-      if(ddl.options[ddl.selectedIndex].value == "None"){
-        alert("Choose another option")
-      }else{
-      return ddl.options[ddl.selectedIndex].value;
-     }}
-
-     /*
-     Returns the time when the problem was reported
-     */
-     function getTime(){
-       var date = new Date();
-       var tmp = date.toUTCString();
-       var time = tmp;
-       return time;
+    /*   google.maps.event.addListener(map, 'click', function(event) {
+         addMarker(location, map);
+       });*/
+       check();
+       addMarker((markerLat, markerLng), map);
      }
 
    /*
@@ -136,51 +169,16 @@ h2{
    (needs work such as taking all the stored points in the database and placing them on the map)
    */
      function addMarker(location, map) {
-
-       var  unverifiedMark = {
-         path: 'M 2,2 2,2 2,2 2,2 2,2 z',
-         fillColor: 'green',
-         fillOpacity: 0.8,
-         scale: 1.5,
-         strokeColor: 'green',
-         strokeWeight: 14,
-       };
-       var  verifiedMark = {
-         path: 'M 2,2 2,2 2,2 2,2 2,2 z',
-         fillColor: 'red',
-         fillOpacity: 0.8,
-         scale: 1.5,
-         strokeColor: 'red',
-         strokeWeight: 14,
-       };
-       var  falseMark = {
-         path: 'M 2,2 2,2 2,2 2,2 2,2 z',
-         fillColor: 'gray',
-         fillOpacity: 0.8,
-         scale: 1.5,
-         strokeColor: 'gray',
-         strokeWeight: 14,
-       };
-       var  dispatchedMark = {
-         path: 'M 2,2 2,2 2,2 2,2 2,2 z',
-         fillColor: 'blue',
-         fillOpacity: 0.8,
-         scale: 1.5,
-         strokeColor: 'blue',
-         strokeWeight: 14,
-       };
-
-       if(pointSet == false && getType() && getDescription() != ''){
        var marker = new google.maps.Marker({
          position: location,
          map: map,
          draggable: true,
          icon: unverifiedMark,
        });
-       pointSet = true;
-      }
+
       marker.addListener('click', function(){
-        alert("ProblemType: " + getType() + "\n" + "Description: " + getDescription() + "\n" + "Time Reported: " + getTime());
+      alert("ProblemType: " + markerType + "\n" + "Description: " + markerDes + "\n" + "Time Reported: " + markerTme
+        + "Address: " + markerAdd);
       })
      }
 

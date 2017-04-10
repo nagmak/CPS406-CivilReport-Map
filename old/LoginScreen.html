@@ -79,23 +79,49 @@ h2 {
 }
 </style>
 
+<script src="https://www.gstatic.com/firebasejs/3.7.5/firebase.js"></script>
 <script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBHwu9L4hXrosQu67TcHLkv5y6rTegswsQ",
+    authDomain: "cps406-d0ee6.firebaseapp.com",
+    databaseURL: "https://cps406-d0ee6.firebaseio.com",
+    projectId: "cps406-d0ee6",
+    storageBucket: "cps406-d0ee6.appspot.com",
+    messagingSenderId: "463280130148"
+  };
+  firebase.initializeApp(config);
+</script>
 
+
+<script>
   /*
   Checks if the username and password are valid
   */
 function checkLogin(){
-var username = document.getElementById('userName').value;
-var password = document.getElementById('passWord').value;
-submitOK = "true";
 
-if(username == "armen" && password == "11"){
+var usr = document.getElementById('userName').value;
+var pwd = document.getElementById('passWord').value;
+
+if(usr == "CPS406" && pwd == "project"){
   window.open("Reports.html");
-  submitOK = "true";
+
 }else{
   alert("Password or Username is invalid!");
   submitOk = "false";
 }
+}
+
+function gotData(data){
+  var usr = data.val();
+  var keys = Object.keys(usr);
+  console.log(data.val());
+  for(var i = 0; i < keys.length; i++){
+    var k = keys[i];
+    var Username = usr[i].Username;
+    var passWord = usr[i].Password;
+    console.log(Username, passWord);
+  }
 }
 </script>
 
