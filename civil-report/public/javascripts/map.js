@@ -2,12 +2,33 @@ var apiKey = 'AIzaSyCA7uRtmPo9Dij18BiD-KUCejMR4HBQJPk';
 var map;
 var drawingManager;
 var lat, long;
+// var selectedMarkers = [];
+// var markerType;
+
+// var setUnverifiableMark = (markerType) =>{
+//     this.markerType = markerType;
+// }
 
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 43.6532, lng: -79.3832 },
         zoom: 15
     });
+
+
+    // WORKING ON SAVING MARKERRS TO THE GOOGLE MAPS 
+    // MAYBE NEED TO GET THESE FROM THE DATABASE INSTEAD? to ensure accuracy?
+    // if (selectedMarkers !== null){
+    //     selectedMarkers.forEach(function(marker){
+    //         var marker = new google.maps.Marker({
+    //             position: new google.maps.LatLng(Number(marker.latitude), Number(marker.longitude)),
+    //             map: map,
+    //             draggable: true,
+    //             icon: markerType,
+    //         });
+    //     });
+    // };
+
     drawingManager = new google.maps.drawing.DrawingManager({
         drawingControl: false
     });
@@ -53,7 +74,7 @@ function initMap() {
         // var regularUser = db.get('regularUser');
          // populate yor box/field with lat, lng
         //  alert("Lat=" + lat + "; Lng=" + lng);
-        addMarker(event.latLng, map);
+        // selectedMarkers.push(addMarker(event.latLng, map));
         displayLatitude.value = lat;
         displayLongitude.value = long;
         getCloseRoad(event.latLng);
@@ -107,7 +128,8 @@ function addMarker(location, map) {
         strokeColor: 'blue',
         strokeWeight: 14,
     };
-
+    
+    // setUnverifiableMark(unverifiedMark);
     var marker = new google.maps.Marker({
         position: location,
         map: map,

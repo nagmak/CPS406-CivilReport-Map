@@ -7,9 +7,9 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  var title = 'Cypress System ';
+  var title = 'Toronto Civic Problem Report Map ';
   if(req.isAuthenticated()){
-    title = 'Cypress System (Civil)';
+    title = 'Toronto Civic Problem Report Map (Civil User)';
   }
   res.render('index', { title: title, user: req.user });
 });
@@ -52,16 +52,16 @@ router.post('/login', function (req, res, next) {
                 return next(err); // will generate a 500 error
             }
             if (!user) {
-                return res.send({ success : false, message : info.message || 'Falha no login' });
+                return res.send({ success : false, message : info.message || 'not logged in' });
             }
 
             req.logIn(user, function(err) {
                 if (err) { return next(err); }
-                // res.send({ success : true, message : 'Login efetivado com sucesso', user: user });
+
                 req.user = user;
             });
             res.redirect('/');
-            //return res.send({ success : true, message : 'Login efetivado com sucesso', user: user });
+
         })(req, res, next);
     });
 
@@ -95,21 +95,18 @@ router.post('/problem',function(req, res, next) {
 
         var email = req.body.optionEmail;
         if (email == ""){ email = "None" };
-        // var lat
-        // var long
 
-        // Set our collection
+        // Select our collection
         var regularUser = db.get('regularUser');
         
-        // Submit to the DB
+        // Submit Civilian report to the DB
             regularUser.insert({
                 "probDesc" : probDesc,
                 "probType" : probType,
                 "email": email,
                 "lat": lat,
                 "long": long
-                // "lat": lat
-                // "long": long
+
             }, function (err, doc) {
                 if (err) {
                     // If it failed, return error
@@ -122,6 +119,7 @@ router.post('/problem',function(req, res, next) {
             });
     }
     else{
+        // Updating Civil User's account if they add a report
         Account.findOne({ username: req.user.username }, function(err, user){
             if(err){
                 res.json(err);

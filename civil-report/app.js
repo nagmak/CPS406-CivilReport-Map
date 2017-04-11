@@ -9,7 +9,7 @@ var flash = require('connect-flash'); // flashes a message to user w/out opening
 
 // Initialize database
 var mongo = require('mongodb');
-var monk = require('monk');
+var monk = require('monk'); // another db - temporary
 var dbURL = 'localhost:27017/civil-report';
 var db = monk(dbURL);
 var mongoose = require('mongoose');
@@ -37,7 +37,11 @@ app.use(session({
   secret: 'keyboard cat',
   resave: false,
   saveUninitialized: false,
-  //cookie: { secure: true } -- this makes sure the connection is HTTPS
+  /*
+    cookie: { secure: true } -- this makes sure the connection is HTTPS
+    - causes a bug with user authentication for non-HTTPS connections
+  */
+
 }))
 app.use(flash());
 app.use(passport.initialize());
@@ -85,7 +89,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-//-app.post('/problem',function(req, res, next) {
-   //- console.log('This is response: ' + req.body);
-//-});
+
 module.exports = app;

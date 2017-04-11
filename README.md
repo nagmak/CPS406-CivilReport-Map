@@ -1,5 +1,9 @@
 # Civil Report Map
 
+![alt text](../public/images/to-map.png "map")
+![alt text](../public/images/register.png "civil user registration")
+![alt text](../public/images/login.png "civil user login")
+
 This webapp has been designed for ordinary citizens and civil servants to report problems in the local Toronto community. 
 
 It contains a page for reporting problems, a page for updating a problem's status by civil servants, and a database that keeps track of all the reported problems. Secure access is provided to civil servants, while the map is open for anyone to use. A user would select a problem-type from the dropdown menu on the map. This would open up a report submission where they can provide comments, and subscribe to updates on the report with an email address. 
