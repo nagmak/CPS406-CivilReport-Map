@@ -1,8 +1,8 @@
 # Civil Report Map
 
-![alt text](../public/images/to-map.png "map")
-![alt text](../public/images/register.png "civil user registration")
-![alt text](../public/images/login.png "civil user login")
+![alt text](https://github.com/nagmak/CPS406-CivilReport-Map/tree/master/civil-report/public/images/to-map.png "map")
+![alt text](https://github.com/nagmak/CPS406-CivilReport-Map/tree/master/civil-report/public/images/register.png "civil user registration")
+![alt text](https://github.com/nagmak/CPS406-CivilReport-Map/tree/master/civil-report/public/images/images/login.png "civil user login")
 
 This webapp has been designed for ordinary citizens and civil servants to report problems in the local Toronto community. 
 
