@@ -9,7 +9,8 @@ var Account = new Schema({
     probType: String,
     email: String,
     lat: Number,
-    long: Number
+    long: Number,
+    timeStamp: Number
 });
 
 Account.plugin(passportLocalMongoose);

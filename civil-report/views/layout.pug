@@ -25,8 +25,9 @@ html
                         else
                             li
                                 a(href=val, title=key)= key
-                ul(class="nav navbar-nav navbar-right")
-                    li 
-                        button(type="button" class="btn btn-default navbar-btn") Civil Account Sign-in 
+                ul(class="nav navbar-nav navbar-right") 
+                        a.button.btn.btn-default.navbar-btn(type='button' href='/login') Civil Account Sign-in
+                        b &nbsp;
+                        a.button.btn.btn-default.navbar-btn(type='button' href='/register') Civil Account Register
         .container
             block content
