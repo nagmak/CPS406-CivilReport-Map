@@ -1,7 +1,6 @@
 # Civil Report Map
 <img src="civil-report/images/to-map.png" alt="map" width="500">
 <img src="civil-report/images/register.png" alt="civil user registration" width="500">
-<img src="civil-report/images/login.png" alt="civil user login" width="500">
 
 This webapp has been designed for ordinary citizens and civil servants to report problems in the local Toronto community. 
 
