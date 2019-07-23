@@ -27,8 +27,10 @@ To prevent any duplicate entries, only one type of problem is allowed within a c
     - `passport-local-mongoose`
     - `pug`
     - `serve-favicon`
-* running the app:
-    - `cd` into the `civil-report` directory
+* running the app locally:
+    - open a terminal and run `mongod --config /usr/local/etc/mongod.conf`
+    - open another terminal and run `mongo`
+    - open another terminal at `CPS406-CivilReport-Map` and `cd` into the `civil-report` directory
     - `npm start`
     - if you run into problems with that: `cd` into `civil-report/bin/` and run `node www` 
     - open up your browser to `localhost:3000`
