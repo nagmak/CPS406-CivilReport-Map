@@ -1,4 +1,4 @@
-var apiKey = 'AIzaSyCA7uRtmPo9Dij18BiD-KUCejMR4HBQJPk';
+var apiKey = '<INSERT API KEY HERE>';
 var map;
 var drawingManager;
 var lat, long;
